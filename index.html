@@ -9,31 +9,43 @@
     <title>Weather Dashboard</title>
 </head>
 <body>
-    <div class="bg-secondary bg-gradient">
+    <div class="header-gradient">
         <h1 class="text-center mb-3 p-2 text-light">Weather Dashboard</h1>
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <form>
-                    City Search with button
+                    <div class="input-group m-3 pr-3">
+                        <div class="col-12 text-center">
+                            <h2>Search for a City:</h2>
+                        </div>
+                        <input type="text" class="form-control" id="cityInput" placeholder="Arlington">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-dark" type="submit" id="searchBtn">Search <i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
                 </form>
-                <div>
-                    City Display
+                <div class="w-100">
+                    <ul class="list-group cityList ml-2 mr-2 mt-2"></ul>
                 </div>
             </div>
-            <div class="col-md-10">
-                <div>
-                    Today's weather forecast
+            <div class="col-md-9">
+                <div class="card shadow-sm m-3">
+                    <div class="card-body cityCurrent">Today's weather forecast</div>
                 </div>
-                <div>
-                    5-day Weather Forecast
+                <div class="m-3">
+                    <h3>5-day Weather Forecast</h3>
+                    <div class="weatherForecast row">
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/187d34ad7c.js" crossorigin="anonymous"></script>
     <script src="assets/js/script.js"></script>
 </body>
 </html>
