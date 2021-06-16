@@ -38,7 +38,7 @@ function storeCity() {
 
 // Gathers current weather for city selected from the stored cities
 function cityCurrentWeather(loadCity, apiKey) {
-    var openWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${loadCity}&appid=${apiKey}`;
+    var openWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${loadCity}&units=imperial&appid=${apiKey}`;
     var cityLon;
     var cityLat;
 
@@ -53,8 +53,8 @@ function cityCurrentWeather(loadCity, apiKey) {
         )
         console.log(data);
         $(".cityCurrent").append(`<p>Temperature: ${data.main.temp} &degF</p>`)
-        $(".cityCurrent").append(`<p>Humidity: ${data.main.humidity} %</p>`)
         $(".cityCurrent").append(`<p>Wind: ${data.wind.speed} mph</p>`)
+        $(".cityCurrent").append(`<p>Humidity: ${data.main.humidity} %</p>`)
 
         cityLon = data.coord.lon;
         cityLat = data.coord.lat;
@@ -64,13 +64,35 @@ function cityCurrentWeather(loadCity, apiKey) {
 
 // Gathers 5-day forecast for chosen city
 function cityForecast(loadCity, apiKey) {
-    var forecastWeatherURL = `https://api.openweathermap.org/data/2.5/forecast?q=${loadCity}&appid=${apiKey}`;
-
+    var forecastWeatherURL = `https://api.openweathermap.org/data/2.5/forecast?q=${loadCity}&units=imperial&exclude=current,minutely,hourly,alerts&appid=${apiKey}`;
+    console.log("The Forecast is loaded");
     $.ajax({
         url: forecastWeatherURL,
         method: "GET"
     }).then(function(data) {
-        
+        for(i = 0; i < 5; i++) {
+            console.log("I am loading the days " + [i]);
+            var forecastDate = data.list[i];
+            var thisDay = moment.unix(data.list[i].dt).format("MM/DD/YYYY");
+            console.log("below is the date");
+            console.log(forecastDate);
+            console.log("Above is the date");
+            console.log(thisDay);
+
+            $(".weatherForecast").append(
+                `<div class="card m-2" style="width: 12rem">
+                    <div class="card-body">
+                        <h4 class="card-title">${thisDay}</h4>
+                        <div class="card-text">
+                            <p><img src="https://openweathermap.org/img/w/${forecastDate.weather[0].icon}.png"/></p>
+                            <p>Temp: ${forecastDate.main.temp} &degF</p>
+                            <p>Wind: ${forecastDate.wind.speed} mph</p>
+                            <p>Humidity: ${forecastDate.main.humidity} %</p>
+                        </div>
+                    </div>
+                </div>`
+            );
+        }
     })
 }
 
