@@ -137,7 +137,7 @@ function displayCurrentCity() {
     $(".cityCurrent").empty();
     cityCurrentWeather(loadCity, apiKey);
     
-    $(".cityForecast").empty();
+    $(".weatherForecast").empty();
 }
 
 init();
