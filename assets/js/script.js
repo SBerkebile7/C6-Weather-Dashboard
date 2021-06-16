@@ -59,39 +59,45 @@ function cityCurrentWeather(loadCity, apiKey) {
         cityLon = data.coord.lon;
         cityLat = data.coord.lat;
         UVIndex(apiKey, cityLat, cityLon);
+        cityForecast(cityLat, cityLon, loadCity);
     })
 }
 
 // Gathers 5-day forecast for chosen city
-function cityForecast(loadCity, apiKey) {
-    var forecastWeatherURL = `https://api.openweathermap.org/data/2.5/forecast?q=${loadCity}&units=imperial&exclude=current,minutely,hourly,alerts&appid=${apiKey}`;
-    console.log("The Forecast is loaded");
+function cityForecast(cityLat, cityLon, loadCity) {
+    // This URL doesn't work, but will continue troubleshooting
+    //var forecastWeatherURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLon}&units=imperial&exclude=current,minutely,hourly,alerts&appid=${apiKey}`;
+    var forecastWeatherURL = `https://api.openweathermap.org/data/2.5/forecast?q=${loadCity}&units=imperial&appid=${apiKey}`;
+
+    console.log("lat: " + cityLat + " & lon: " + cityLon);
     $.ajax({
         url: forecastWeatherURL,
         method: "GET"
     }).then(function(data) {
-        for(i = 0; i < 5; i++) {
+        for(i = 0; i < data.list.length; i++) {
             console.log("I am loading the days " + [i]);
             var forecastDate = data.list[i];
             var thisDay = moment.unix(data.list[i].dt).format("MM/DD/YYYY");
-            console.log("below is the date");
+            console.log("below is the forecastDate");
             console.log(forecastDate);
-            console.log("Above is the date");
+            console.log("Above is the thisDay date");
             console.log(thisDay);
-
-            $(".weatherForecast").append(
-                `<div class="card m-2" style="width: 12rem">
-                    <div class="card-body">
-                        <h4 class="card-title">${thisDay}</h4>
-                        <div class="card-text">
-                            <p><img src="https://openweathermap.org/img/w/${forecastDate.weather[0].icon}.png"/></p>
-                            <p>Temp: ${forecastDate.main.temp} &degF</p>
-                            <p>Wind: ${forecastDate.wind.speed} mph</p>
-                            <p>Humidity: ${forecastDate.main.humidity} %</p>
+            
+            if(data.list[i].dt_txt.search("15:00:00") != -1) {
+                $(".weatherForecast").append(
+                    `<div class="card m-2" style="width: 12rem">
+                        <div class="card-body">
+                            <h4 class="card-title">${thisDay}</h4>
+                            <div class="card-text">
+                                <p><img src="https://openweathermap.org/img/w/${forecastDate.weather[0].icon}.png"/></p>
+                                <p>Temp: ${forecastDate.main.temp} &degF</p>
+                                <p>Wind: ${forecastDate.wind.speed} mph</p>
+                                <p>Humidity: ${forecastDate.main.humidity} %</p>
+                            </div>
                         </div>
-                    </div>
-                </div>`
-            );
+                    </div>`
+                );
+            }
         }
     })
 }
@@ -132,7 +138,6 @@ function displayCurrentCity() {
     cityCurrentWeather(loadCity, apiKey);
     
     $(".cityForecast").empty();
-    cityForecast(loadCity, apiKey);
 }
 
 init();
